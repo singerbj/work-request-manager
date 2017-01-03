@@ -1,0 +1,63 @@
+body {
+    background-color: #eeeeee;
+    color: #222222;
+    font-family: 'Inconsolata', monospace;
+    font-size: 1.5rem;
+}
+
+.menu {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 240px;
+    height: 100%;
+    background-color: #222222;
+    color: #eeeeee;
+    font-size: 2rem;
+    font-weight: bold;
+    margin-left: -200px;
+
+    text-align: center;
+    padding: 20px;
+    transition: margin-left 0.5s;
+}
+
+.menu-open .menu {
+    margin-left: 0px;
+}
+
+.menu-icon {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    width: 40px;
+    height: 40px;
+    padding-top: 20px;
+    cursor: pointer;
+}
+
+.menu ul {
+    padding: 0px;
+    list-style: none;
+    cursor: pointer;
+}
+
+.header {
+    font-size: 2rem;
+    font-weight: bold;
+    padding-bottom: 20px;
+
+}
+
+.container-fluid {
+    padding: 0px;
+}
+.content {
+    margin-left: 40px;
+    padding: 20px;
+    transition: margin-left 0.5s;
+}
+
+.menu-open .content {
+    margin-left: 240px;
+}
