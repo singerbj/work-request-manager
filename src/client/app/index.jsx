@@ -1,7 +1,7 @@
 import React from 'react';
 import {render} from 'react-dom';
 
-import Ajax from './helpers/Ajax.js';
+// import Ajax from './helpers/Ajax.js';
 import Header from './components/layout/Header.jsx';
 import Menu from './components/layout/Menu.jsx';
 import Home from './components/home/Home.jsx';
@@ -30,7 +30,6 @@ class App extends React.Component {
 
     renderContent () {
         var hash = document.location.hash.replace('#','');
-        console.log(hash);
         if(hash === 'Tasks'){
             return (
                 <div>

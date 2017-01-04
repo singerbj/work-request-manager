@@ -3,7 +3,7 @@ var bodyParser = require('body-parser');
 var app = express();
 var jsonParser = bodyParser.json();
 
-var clientFolderPath = __dirname.replace('server', '') + 'client\\';
+var clientFolderPath = __dirname.replace('server', '') + 'client/';
 app.use((express.static(clientFolderPath)));
 app.get('/', function(req, res) {
     res.sendFile(clientFolderPath + 'index.html');

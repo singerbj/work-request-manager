@@ -2,7 +2,7 @@ var q = require('q');
 var Sequelize = require('sequelize');
 var forceSync = false;
 
-var sequelize = new Sequelize('work_request_manager', 'postgres', '', {
+var sequelize = new Sequelize('work_request_manager', 'postgres', 'postgres', {
   host: 'localhost',
   dialect: 'postgres',
   pool: {

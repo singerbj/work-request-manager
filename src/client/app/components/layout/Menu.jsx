@@ -39,7 +39,7 @@ class Menu extends React.Component {
         return (
             <div className="menu">
                 <div className="menu-icon" onClick={this.toggleMenu}>
-                    <i className="fa fa-bars" aria-hidden="true"></i>
+                    <i className="fa fa-chevron-right" aria-hidden="true"></i>
                 </div>
                 <ul>
                     <li onClick={this.goToHome}>Home</li>

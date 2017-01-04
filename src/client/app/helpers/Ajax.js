@@ -1,11 +1,20 @@
 var Ajax = {
-    getData(subreddit) {
-        subreddit = subreddit || 'all';
-        var url = 'https://www.reddit.com/r/' + subreddit + '.json?limit=100';
-        return fetch(url)
-            .catch((error) => {
-                console.error(error);
-            });
+    // getData(subreddit) {
+    //     subreddit = subreddit || 'all';
+    //     var url = 'https://www.reddit.com/r/' + subreddit + '.json?limit=100';
+    //     return fetch(url)
+    //         .catch((error) => {
+    //             console.error(error);
+    //         });
+    // }
+    user: {
+        getAll() {
+            var url = '/user';
+            return fetch(url)
+                .catch((error) => {
+                    console.error(error);
+                });
+        }
     }
 };
 export default Ajax;
