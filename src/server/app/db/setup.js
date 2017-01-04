@@ -2,9 +2,10 @@ var q = require('q');
 var Sequelize = require('sequelize');
 var forceSync = false;
 
-var sequelize = new Sequelize('work_request_manager', 'postgres', 'postgres', {
+var sequelize = new Sequelize('work_request_manager', 'postgres', '', {
   host: 'localhost',
   dialect: 'postgres',
+  storage: "session",
   pool: {
     max: 5,
     min: 0,
@@ -14,6 +15,16 @@ var sequelize = new Sequelize('work_request_manager', 'postgres', 'postgres', {
 
 // // Or you can simply use a connection uri
 // var sequelize = new Sequelize('postgres://user:pass@example.com:5432/dbname');
+//
+// var Session = sequelize.define('Sessions', {
+//     sid: {
+//       type: Sequelize.STRING,
+//       primaryKey: true
+//     },
+//     userId: Sequelize.STRING,
+//     expires: Sequelize.DATE,
+//     data: Sequelize.STRING(50000)
+// });
 
 var User = sequelize.define('user',
     {
@@ -41,6 +52,7 @@ var User = sequelize.define('user',
 
 var promises = [
     User.sync({force: forceSync})
+    // Session.sync({force: forceSync})
 ];
 
 module.exports = {

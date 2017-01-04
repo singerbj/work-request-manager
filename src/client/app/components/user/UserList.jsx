@@ -1,6 +1,7 @@
 import React from 'react';
 import Strings from '../../helpers/Strings.js';
 import Ajax from '../../helpers/Ajax.js';
+import Dom from '../../helpers/Dom.js';
 
 import UserItem from './UserItem.jsx';
 
@@ -8,10 +9,14 @@ class UserList extends React.Component {
     constructor(props) {
         super(props);
         this.state = {};
+        this.updateData = this.updateData.bind(this);
+        this.add = this.add.bind(this);
+        this.componentDidMount = this.componentDidMount.bind(this);
+        this.componentWillReceiveProps = this.componentWillReceiveProps.bind(this);
         this.renderUsers = this.renderUsers.bind(this);
     }
 
-    updateData (after) {
+    updateData () {
         this.setState({data: undefined});
         return Ajax.user.getAll()
         .then((response) => response.json())
@@ -26,16 +31,26 @@ class UserList extends React.Component {
         });
     }
 
+    add () {
+        Dom.addClass(document.body,'form-open');
+        this.props.loadForm({formType: 'user'});
+    }
+
     componentDidMount () {
         this.updateData();
     }
 
+    componentWillReceiveProps(nextProps) {
+        this.updateData();
+    }
+
     renderUsers () {
+        var self = this;
         var users = [];
         if(this.state.users){
             this.state.users.forEach(function(user){
                 users.push(
-                    <UserItem user={user} key={user.id}/>
+                    <UserItem user={user} key={user.id} loadForm={self.props.loadForm} update={self.props.update}/>
                 );
             });
         }
@@ -44,8 +59,11 @@ class UserList extends React.Component {
 
     render() {
         return (
-            <div className="user-list">
-                {this.renderUsers()}
+            <div>
+                <a onClick={this.add}>add</a>
+                <div className="user-list">
+                    {this.renderUsers()}
+                </div>
             </div>
         );
     }

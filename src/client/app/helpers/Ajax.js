@@ -1,19 +1,57 @@
 var Ajax = {
-    // getData(subreddit) {
-    //     subreddit = subreddit || 'all';
-    //     var url = 'https://www.reddit.com/r/' + subreddit + '.json?limit=100';
-    //     return fetch(url)
-    //         .catch((error) => {
-    //             console.error(error);
-    //         });
-    // }
+    login : {
+        login (credentials) {
+            var url = '/login';
+            return fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(credentials)
+                })
+        },
+        status () {
+            var url = '/status';
+            return fetch(url)
+        }
+    },
     user: {
         getAll() {
             var url = '/user';
             return fetch(url)
-                .catch((error) => {
-                    console.error(error);
-                });
+        },
+        getOne(user) {
+            var url = '/user/' + user.id;
+            return fetch(url)
+        },
+        save(user) {
+            var url = '/user';
+            return fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(user)
+                })
+        },
+        update(user) {
+            var url = '/user';
+            return fetch(url, {
+                    method: 'PUT',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(user)
+                })
+        },
+        delete(user) {
+            var url = '/user/' + user.id;
+            return fetch(url, {
+                    method: 'DELETE'
+                })
         }
     }
 };

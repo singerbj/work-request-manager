@@ -3,10 +3,11 @@ body {
     color: #222222;
     font-family: 'Inconsolata', monospace;
     font-size: 1.5rem;
+    overflow-x: hidden;
 }
 
 .menu {
-    position: absolute;
+    position: fixed;
     top: 0px;
     left: 0px;
     width: 240px;
@@ -57,6 +58,7 @@ body {
 
 .content {
     margin-left: 60px;
+    margin-right: 0px;
     padding: 20px;
     transition: margin-left 0.75s;
 }
@@ -65,7 +67,7 @@ body {
     margin-left: 240px;
 }
 
-.fa-chevron-right {
+.menu .fa-chevron-right {
     width: 20px;
     transition-duration: 0.75s;
     transition-property: transform;
@@ -80,4 +82,119 @@ body {
     padding-bottom: 5px;
     border-bottom: 1px solid #222222;
     margin-bottom: 5px;
+}
+
+a {
+    cursor: pointer;
+}
+
+.delete {
+    color: #ee0000;
+}
+
+.delete:hover {
+    color: #bb0000;
+}
+
+
+.form {
+    position: fixed;
+    top: 0px;
+    right: 0px;
+    max-width: calc(100% - 240px);
+    height: 100%;
+    background-color: #222222;
+    color: #eeeeee;
+    font-size: 2rem;
+    font-weight: bold;
+    margin-right: calc(-100% + 240px);
+    padding: 20px;
+    transition: margin-right 0.75s;
+    text-align: right;
+}
+
+.form-open .form {
+    margin-right: 0px;
+}
+
+.form-open .content {
+    /*margin-right: calc(100% - 240px);*/
+}
+
+.form-icon {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 40px;
+    height: 40px;
+    padding-top: 20px;
+    padding-left: 20px;
+    cursor: pointer;
+    text-align: center;
+}
+.form .fa-times {
+    width: 20px;
+    transition-duration: 0.75s;
+    transition-property: transform;
+}
+
+.form-open .fa-times {
+    transform:rotate(-180deg);
+}
+
+input, select, button {
+    height: 40px;
+    width: 300px;
+    max-width: 100%;
+    border: 0px;
+    color: #222222;
+    line-height: 20px;
+    background-color: #eeeeee;
+}
+input {
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+input:focus,
+select:focus,
+textarea:focus,
+button:focus {
+    outline: none;
+}
+
+button:hover {
+    color: #aaaaaa;
+}
+
+.user-form > div {
+    margin-left: 40px;
+    margin-bottom: 20px;
+}
+
+.login {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    background-color: #222222;
+    color: #eeeeee;
+    font-weight: bold;
+    padding: 20px;
+    text-align: center;
+    z-index: 10;
+}
+
+.hide-login .login {
+    display: none;
+}
+
+.login-title {
+    font-size: 2rem;
+    margin-bottom: 40px;
+}
+
+.login > div:not(.login-title) {
+    margin-bottom: 20px;
 }

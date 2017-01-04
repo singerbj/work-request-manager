@@ -10,7 +10,7 @@ class Header extends React.Component {
     render() {
         return (
             <div className="header">
-                <span>Header</span>
+                <span>{this.props.title}</span>
             </div>
         )
     }

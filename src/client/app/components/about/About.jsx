@@ -10,7 +10,8 @@ class About extends React.Component {
     render() {
         return (
             <div className="home">
-                <span>About</span>
+                <p>I made a thing that does a thing.</p>
+                <p>Ben Singer</p>
             </div>
         )
     }
