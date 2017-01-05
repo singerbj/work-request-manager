@@ -47,13 +47,13 @@ class App extends React.Component {
     }
 
     componentDidMount () {
-        Ajax.login.status()
-            .then((response) => response.json())
-            .then((data) => {
-                Helpers.addClass(document.body, 'hide-login');
-            }).catch((data) => {
-                console.log(data.message);
-            });
+        // Ajax.login.status()
+        //     .then((response) => response.json())
+        //     .then((data) => {
+        //         Helpers.addClass(document.body, 'hide-login');
+        //     }).catch((data) => {
+        //         console.log(data.message);
+        //     });
     }
 
     renderContent () {
@@ -81,7 +81,7 @@ class App extends React.Component {
     render () {
         return (
             <div>
-                <Login hideLogin={this.hideLogin}></Login>
+                {/* <Login hideLogin={this.hideLogin}></Login> */}
                 <Menu toggleMenu={this.toggleMenu} navigate={this.navigate}></Menu>
                 <Form closeForm={this.closeForm} formData={this.state.formData} update={this.update}></Form>
                 <div className="content">

@@ -53,6 +53,44 @@ var Ajax = {
                     method: 'DELETE'
                 })
         }
+    },
+    task: {
+        getAll() {
+            var url = '/task';
+            return fetch(url)
+        },
+        getOne(task) {
+            var url = '/task/' + task.id;
+            return fetch(url)
+        },
+        save(task) {
+            var url = '/task';
+            return fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(task)
+                })
+        },
+        update(task) {
+            var url = '/task';
+            return fetch(url, {
+                    method: 'PUT',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(task)
+                })
+        },
+        delete(task) {
+            var url = '/task/' + task.id;
+            return fetch(url, {
+                    method: 'DELETE'
+                })
+        }
     }
 };
 export default Ajax;

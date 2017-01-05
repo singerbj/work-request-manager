@@ -28,13 +28,13 @@ class UserItem extends React.Component {
 
     render() {
         return (
-            <div className="user-item">
+            <div className="item user-item">
                 <div className="name">{this.props.user.name}</div>
                 <div className="email">{this.props.user.email}</div>
                 {/* <div className="password">{this.user.password}</div> */}
-                <div className="role">
+                {/* <div className="role">
                     {this.props.user.role === 1 ? 'Admin' : 'Normal User'}
-                </div>
+                </div> */}
                 <a onClick={this.edit}>edit</a>
                 &nbsp;
                 <a className="delete" onClick={this.delete}>delete</a>

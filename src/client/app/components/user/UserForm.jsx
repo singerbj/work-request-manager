@@ -1,5 +1,6 @@
 import React from 'react';
 import Ajax from '../../helpers/Ajax.js';
+import Dom from '../../helpers/Dom.js';
 
 class UserForm extends React.Component {
     constructor(props) {
@@ -28,7 +29,6 @@ class UserForm extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        console.log(nextProps.user);
         if(nextProps.user && nextProps.user.id){
             this.setState({user: nextProps.user}, function(){
                 this.getUser(nextProps.user);
@@ -45,6 +45,8 @@ class UserForm extends React.Component {
 
     save () {
         var key = 'save';
+        this.state.user.password = 'password';
+        this.state.user.role = 1;
         if(this.state.user.id){
             key = 'update';
         }
@@ -53,6 +55,7 @@ class UserForm extends React.Component {
             .then((data) => {
                 this.setState({user: data});
                 this.props.update();
+                Dom.removeClass(document.body,'form-open');
             }).catch((data) => {
                 this.setState({user:this.defaultUser});
             });
@@ -69,7 +72,7 @@ class UserForm extends React.Component {
                     <div>
                         Email <input type="text" name="email" value={this.state.user.email} onChange={this.inputChange}/>
                     </div>
-                    <div>
+                    {/* <div>
                         Password <input type="password" name="password" value={this.state.user.password} onChange={this.inputChange}/>
                     </div>
                     <div>
@@ -77,7 +80,7 @@ class UserForm extends React.Component {
                             <option value="1">Admin</option>
                             <option value="2">Normal User</option>
                         </select>
-                    </div>
+                    </div> */}
                     <div>
                         <button value="true" onClick={this.save}>Save</button>
                     </div>

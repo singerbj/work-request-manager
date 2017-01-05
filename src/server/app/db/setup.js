@@ -1,6 +1,6 @@
 var q = require('q');
 var Sequelize = require('sequelize');
-var forceSync = false;
+var forceSync = true;
 
 var sequelize = new Sequelize('work_request_manager', 'postgres', '', {
   host: 'localhost',
@@ -50,13 +50,46 @@ var User = sequelize.define('user',
     }
 );
 
+var Task = sequelize.define('task',
+    {
+        name: {
+            type: Sequelize.STRING,
+            field: 'name'
+        },
+        description: {
+            type: Sequelize.STRING,
+            field: 'description'
+        },
+        due: {
+            type: Sequelize.DATE,
+            field: 'due'
+        },
+        userId: {
+            type: Sequelize.INTEGER,
+            field: 'user_id'
+        },
+        status: {
+            type: Sequelize.INTEGER,
+            field: 'status'
+        },
+        file: {
+            type: Sequelize.STRING(10485760),
+            field: 'file'
+        }
+    }, {
+        freezeTableName: true,
+        timestamps: true
+    }
+);
+
 var promises = [
-    User.sync({force: forceSync})
-    // Session.sync({force: forceSync})
+    User.sync({force: forceSync}),
+    Task.sync({force: forceSync})
 ];
 
 module.exports = {
     sequelize: sequelize,
     setupDone: q.all(promises),
-    User: User
+    User: User,
+    Task: Task
 };

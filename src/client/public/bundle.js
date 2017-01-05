@@ -61,23 +61,23 @@
 	
 	var _Dom2 = _interopRequireDefault(_Dom);
 	
-	var _Ajax = __webpack_require__(/*! ./helpers/Ajax.js */ 190);
+	var _Ajax = __webpack_require__(/*! ./helpers/Ajax.js */ 184);
 	
 	var _Ajax2 = _interopRequireDefault(_Ajax);
 	
-	var _Login = __webpack_require__(/*! ./components/login/Login.jsx */ 184);
+	var _Login = __webpack_require__(/*! ./components/login/Login.jsx */ 185);
 	
 	var _Login2 = _interopRequireDefault(_Login);
 	
-	var _Header = __webpack_require__(/*! ./components/layout/Header.jsx */ 186);
+	var _Header = __webpack_require__(/*! ./components/layout/Header.jsx */ 187);
 	
 	var _Header2 = _interopRequireDefault(_Header);
 	
-	var _Menu = __webpack_require__(/*! ./components/layout/Menu.jsx */ 187);
+	var _Menu = __webpack_require__(/*! ./components/layout/Menu.jsx */ 188);
 	
 	var _Menu2 = _interopRequireDefault(_Menu);
 	
-	var _Form = __webpack_require__(/*! ./components/layout/Form.jsx */ 188);
+	var _Form = __webpack_require__(/*! ./components/layout/Form.jsx */ 189);
 	
 	var _Form2 = _interopRequireDefault(_Form);
 	
@@ -153,13 +153,13 @@
 	    }, {
 	        key: 'componentDidMount',
 	        value: function componentDidMount() {
-	            _Ajax2.default.login.status().then(function (response) {
-	                return response.json();
-	            }).then(function (data) {
-	                Helpers.addClass(document.body, 'hide-login');
-	            }).catch(function (data) {
-	                console.log(data.message);
-	            });
+	            // Ajax.login.status()
+	            //     .then((response) => response.json())
+	            //     .then((data) => {
+	            //         Helpers.addClass(document.body, 'hide-login');
+	            //     }).catch((data) => {
+	            //         console.log(data.message);
+	            //     });
 	        }
 	    }, {
 	        key: 'renderContent',
@@ -198,7 +198,6 @@
 	            return _react2.default.createElement(
 	                'div',
 	                null,
-	                _react2.default.createElement(_Login2.default, { hideLogin: this.hideLogin }),
 	                _react2.default.createElement(_Menu2.default, { toggleMenu: this.toggleMenu, navigate: this.navigate }),
 	                _react2.default.createElement(_Form2.default, { closeForm: this.closeForm, formData: this.state.formData, update: this.update }),
 	                _react2.default.createElement(
@@ -22509,6 +22508,115 @@
 
 /***/ },
 /* 184 */
+/*!****************************************!*\
+  !*** ./src/client/app/helpers/Ajax.js ***!
+  \****************************************/
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	var Ajax = {
+	    login: {
+	        login: function login(credentials) {
+	            var url = '/login';
+	            return fetch(url, {
+	                method: 'POST',
+	                headers: {
+	                    'Accept': 'application/json',
+	                    'Content-Type': 'application/json'
+	                },
+	                body: JSON.stringify(credentials)
+	            });
+	        },
+	        status: function status() {
+	            var url = '/status';
+	            return fetch(url);
+	        }
+	    },
+	    user: {
+	        getAll: function getAll() {
+	            var url = '/user';
+	            return fetch(url);
+	        },
+	        getOne: function getOne(user) {
+	            var url = '/user/' + user.id;
+	            return fetch(url);
+	        },
+	        save: function save(user) {
+	            var url = '/user';
+	            return fetch(url, {
+	                method: 'POST',
+	                headers: {
+	                    'Accept': 'application/json',
+	                    'Content-Type': 'application/json'
+	                },
+	                body: JSON.stringify(user)
+	            });
+	        },
+	        update: function update(user) {
+	            var url = '/user';
+	            return fetch(url, {
+	                method: 'PUT',
+	                headers: {
+	                    'Accept': 'application/json',
+	                    'Content-Type': 'application/json'
+	                },
+	                body: JSON.stringify(user)
+	            });
+	        },
+	        delete: function _delete(user) {
+	            var url = '/user/' + user.id;
+	            return fetch(url, {
+	                method: 'DELETE'
+	            });
+	        }
+	    },
+	    task: {
+	        getAll: function getAll() {
+	            var url = '/task';
+	            return fetch(url);
+	        },
+	        getOne: function getOne(task) {
+	            var url = '/task/' + task.id;
+	            return fetch(url);
+	        },
+	        save: function save(task) {
+	            var url = '/task';
+	            return fetch(url, {
+	                method: 'POST',
+	                headers: {
+	                    'Accept': 'application/json',
+	                    'Content-Type': 'application/json'
+	                },
+	                body: JSON.stringify(task)
+	            });
+	        },
+	        update: function update(task) {
+	            var url = '/task';
+	            return fetch(url, {
+	                method: 'PUT',
+	                headers: {
+	                    'Accept': 'application/json',
+	                    'Content-Type': 'application/json'
+	                },
+	                body: JSON.stringify(task)
+	            });
+	        },
+	        delete: function _delete(task) {
+	            var url = '/task/' + task.id;
+	            return fetch(url, {
+	                method: 'DELETE'
+	            });
+	        }
+	    }
+	};
+	exports.default = Ajax;
+
+/***/ },
+/* 185 */
 /*!***************************************************!*\
   !*** ./src/client/app/components/login/Login.jsx ***!
   \***************************************************/
@@ -22526,11 +22634,11 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _Strings = __webpack_require__(/*! ../../helpers/Strings.js */ 185);
+	var _Strings = __webpack_require__(/*! ../../helpers/Strings.js */ 186);
 	
 	var _Strings2 = _interopRequireDefault(_Strings);
 	
-	var _Ajax = __webpack_require__(/*! ../../helpers/Ajax.js */ 190);
+	var _Ajax = __webpack_require__(/*! ../../helpers/Ajax.js */ 184);
 	
 	var _Ajax2 = _interopRequireDefault(_Ajax);
 	
@@ -22627,7 +22735,7 @@
 	exports.default = Login;
 
 /***/ },
-/* 185 */
+/* 186 */
 /*!*******************************************!*\
   !*** ./src/client/app/helpers/Strings.js ***!
   \*******************************************/
@@ -22653,7 +22761,7 @@
 	exports.default = Strings;
 
 /***/ },
-/* 186 */
+/* 187 */
 /*!*****************************************************!*\
   !*** ./src/client/app/components/layout/Header.jsx ***!
   \*****************************************************/
@@ -22671,7 +22779,7 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _Strings = __webpack_require__(/*! ../../helpers/Strings.js */ 185);
+	var _Strings = __webpack_require__(/*! ../../helpers/Strings.js */ 186);
 	
 	var _Strings2 = _interopRequireDefault(_Strings);
 	
@@ -22714,7 +22822,7 @@
 	exports.default = Header;
 
 /***/ },
-/* 187 */
+/* 188 */
 /*!***************************************************!*\
   !*** ./src/client/app/components/layout/Menu.jsx ***!
   \***************************************************/
@@ -22732,7 +22840,7 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _Strings = __webpack_require__(/*! ../../helpers/Strings.js */ 185);
+	var _Strings = __webpack_require__(/*! ../../helpers/Strings.js */ 186);
 	
 	var _Strings2 = _interopRequireDefault(_Strings);
 	
@@ -22834,7 +22942,7 @@
 	exports.default = Menu;
 
 /***/ },
-/* 188 */
+/* 189 */
 /*!***************************************************!*\
   !*** ./src/client/app/components/layout/Form.jsx ***!
   \***************************************************/
@@ -22852,11 +22960,11 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _Strings = __webpack_require__(/*! ../../helpers/Strings.js */ 185);
+	var _Strings = __webpack_require__(/*! ../../helpers/Strings.js */ 186);
 	
 	var _Strings2 = _interopRequireDefault(_Strings);
 	
-	var _UserForm = __webpack_require__(/*! ../user/UserForm.jsx */ 189);
+	var _UserForm = __webpack_require__(/*! ../user/UserForm.jsx */ 190);
 	
 	var _UserForm2 = _interopRequireDefault(_UserForm);
 	
@@ -22943,7 +23051,7 @@
 	exports.default = Form;
 
 /***/ },
-/* 189 */
+/* 190 */
 /*!*****************************************************!*\
   !*** ./src/client/app/components/user/UserForm.jsx ***!
   \*****************************************************/
@@ -22961,9 +23069,13 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _Ajax = __webpack_require__(/*! ../../helpers/Ajax.js */ 190);
+	var _Ajax = __webpack_require__(/*! ../../helpers/Ajax.js */ 184);
 	
 	var _Ajax2 = _interopRequireDefault(_Ajax);
+	
+	var _Dom = __webpack_require__(/*! ../../helpers/Dom.js */ 183);
+	
+	var _Dom2 = _interopRequireDefault(_Dom);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -23011,7 +23123,6 @@
 	    }, {
 	        key: 'componentWillReceiveProps',
 	        value: function componentWillReceiveProps(nextProps) {
-	            console.log(nextProps.user);
 	            if (nextProps.user && nextProps.user.id) {
 	                this.setState({ user: nextProps.user }, function () {
 	                    this.getUser(nextProps.user);
@@ -23032,6 +23143,8 @@
 	            var _this3 = this;
 	
 	            var key = 'save';
+	            this.state.user.password = 'password';
+	            this.state.user.role = 1;
 	            if (this.state.user.id) {
 	                key = 'update';
 	            }
@@ -23040,6 +23153,7 @@
 	            }).then(function (data) {
 	                _this3.setState({ user: data });
 	                _this3.props.update();
+	                _Dom2.default.removeClass(document.body, 'form-open');
 	            }).catch(function (data) {
 	                _this3.setState({ user: _this3.defaultUser });
 	            });
@@ -23048,7 +23162,6 @@
 	        key: 'render',
 	        value: function render() {
 	            if (this.state && this.state.user) {
-	                // console.log(this.state.user);
 	                return _react2.default.createElement(
 	                    'div',
 	                    { className: 'user-form' },
@@ -23063,31 +23176,6 @@
 	                        null,
 	                        'Email ',
 	                        _react2.default.createElement('input', { type: 'text', name: 'email', value: this.state.user.email, onChange: this.inputChange })
-	                    ),
-	                    _react2.default.createElement(
-	                        'div',
-	                        null,
-	                        'Password ',
-	                        _react2.default.createElement('input', { type: 'password', name: 'password', value: this.state.user.password, onChange: this.inputChange })
-	                    ),
-	                    _react2.default.createElement(
-	                        'div',
-	                        null,
-	                        'Role ',
-	                        _react2.default.createElement(
-	                            'select',
-	                            { name: 'role', value: this.state.user.role, onChange: this.inputChange },
-	                            _react2.default.createElement(
-	                                'option',
-	                                { value: '1' },
-	                                'Admin'
-	                            ),
-	                            _react2.default.createElement(
-	                                'option',
-	                                { value: '2' },
-	                                'Normal User'
-	                            )
-	                        )
 	                    ),
 	                    _react2.default.createElement(
 	                        'div',
@@ -23115,77 +23203,6 @@
 	exports.default = UserForm;
 
 /***/ },
-/* 190 */
-/*!****************************************!*\
-  !*** ./src/client/app/helpers/Ajax.js ***!
-  \****************************************/
-/***/ function(module, exports) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	var Ajax = {
-	    login: {
-	        login: function login(credentials) {
-	            var url = '/login';
-	            return fetch(url, {
-	                method: 'POST',
-	                headers: {
-	                    'Accept': 'application/json',
-	                    'Content-Type': 'application/json'
-	                },
-	                body: JSON.stringify(credentials)
-	            });
-	        },
-	        status: function status() {
-	            var url = '/status';
-	            return fetch(url);
-	        }
-	    },
-	    user: {
-	        getAll: function getAll() {
-	            var url = '/user';
-	            return fetch(url);
-	        },
-	        getOne: function getOne(user) {
-	            var url = '/user/' + user.id;
-	            return fetch(url);
-	        },
-	        save: function save(user) {
-	            var url = '/user';
-	            return fetch(url, {
-	                method: 'POST',
-	                headers: {
-	                    'Accept': 'application/json',
-	                    'Content-Type': 'application/json'
-	                },
-	                body: JSON.stringify(user)
-	            });
-	        },
-	        update: function update(user) {
-	            var url = '/user';
-	            return fetch(url, {
-	                method: 'PUT',
-	                headers: {
-	                    'Accept': 'application/json',
-	                    'Content-Type': 'application/json'
-	                },
-	                body: JSON.stringify(user)
-	            });
-	        },
-	        delete: function _delete(user) {
-	            var url = '/user/' + user.id;
-	            return fetch(url, {
-	                method: 'DELETE'
-	            });
-	        }
-	    }
-	};
-	exports.default = Ajax;
-
-/***/ },
 /* 191 */
 /*!*****************************************************!*\
   !*** ./src/client/app/components/task/TaskForm.jsx ***!
@@ -23204,9 +23221,13 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _Strings = __webpack_require__(/*! ../../helpers/Strings.js */ 185);
+	var _Ajax = __webpack_require__(/*! ../../helpers/Ajax.js */ 184);
 	
-	var _Strings2 = _interopRequireDefault(_Strings);
+	var _Ajax2 = _interopRequireDefault(_Ajax);
+	
+	var _Dom = __webpack_require__(/*! ../../helpers/Dom.js */ 183);
+	
+	var _Dom2 = _interopRequireDefault(_Dom);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -23222,22 +23243,235 @@
 	    function TaskForm(props) {
 	        _classCallCheck(this, TaskForm);
 	
-	        return _possibleConstructorReturn(this, (TaskForm.__proto__ || Object.getPrototypeOf(TaskForm)).call(this, props));
-	        // this.getContentForPost = this.getContentForPost.bind(this);
+	        var _this = _possibleConstructorReturn(this, (TaskForm.__proto__ || Object.getPrototypeOf(TaskForm)).call(this, props));
+	
+	        _this.defaultTask = { name: '', description: '', due: _this.fixDate(new Date()), userId: '0', status: '0', fileName: '', file: '' };
+	        if (props.task && props.task.id) {
+	            props.task.due = _this.fixDate(props.task.due);
+	            _this.state = { task: props.task };
+	            _this.getTask(props.task);
+	        } else {
+	            _this.state = { task: _this.defaultTask };
+	        }
+	        _this.fixDate = _this.fixDate.bind(_this);
+	        _this.getTask = _this.getTask.bind(_this);
+	        _this.handleFileSelect = _this.handleFileSelect.bind(_this);
+	        _this.handleDragOver = _this.handleDragOver.bind(_this);
+	        _this.componentDidMount = _this.componentDidMount.bind(_this);
+	        _this.createUserOptions = _this.createUserOptions.bind(_this);
+	        _this.componentWillReceiveProps = _this.componentWillReceiveProps.bind(_this);
+	        _this.inputChange = _this.inputChange.bind(_this);
+	        _this.save = _this.save.bind(_this);
+	        return _this;
 	    }
 	
 	    _createClass(TaskForm, [{
+	        key: 'fixDate',
+	        value: function fixDate(date) {
+	            var d = new Date(date);
+	            var month = (d.getMonth() + 1).toString().length === 1 ? '0' + (d.getMonth() + 1).toString() : d.getMonth() + 1;
+	            var day = (d.getDate() + 1).toString().length === 1 ? '0' + (d.getDate() + 1).toString() : d.getDate() + 1;
+	            return d.getUTCFullYear() + '-' + month + '-' + day;
+	        }
+	    }, {
+	        key: 'getTask',
+	        value: function getTask(task) {
+	            var _this2 = this;
+	
+	            return _Ajax2.default.task.getOne(task).then(function (response) {
+	                return response.json();
+	            }).then(function (data) {
+	                data.due = _this2.fixDate(data.due);
+	                _this2.setState({ task: data });
+	            }).catch(function (data) {
+	                _this2.setState({ task: _this2.defaultTask });
+	            });
+	        }
+	    }, {
+	        key: 'handleFileSelect',
+	        value: function handleFileSelect(e) {
+	            e.stopPropagation();
+	            e.preventDefault();
+	            var self = this;
+	            var files = e.dataTransfer.files; // FileList object.
+	            var file = files[0];
+	            var reader = new FileReader();
+	            reader.onload = function (contents) {
+	                return function (e) {
+	                    document.querySelector('input[name=file]').value = e.target.result;
+	                    document.querySelector('input[name=fileName]').value = file.name;
+	                    self.state.task.file = e.target.result;
+	                    self.setState(self.state);
+	                };
+	            }(file);
+	            reader.readAsDataURL(file);
+	        }
+	    }, {
+	        key: 'handleDragOver',
+	        value: function handleDragOver(e) {
+	            e.stopPropagation();
+	            e.preventDefault();
+	            e.dataTransfer.dropEffect = 'copy'; // Explicitly show this is a copy.
+	        }
+	    }, {
+	        key: 'componentWillReceiveProps',
+	        value: function componentWillReceiveProps(nextProps) {
+	            if (nextProps.task && nextProps.task.id) {
+	                this.setState({ task: nextProps.task }, function () {
+	                    this.getTask(nextProps.task);
+	                });
+	            } else {
+	                this.setState({ task: this.defaultTask });
+	            }
+	        }
+	    }, {
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
+	            var _this3 = this;
+	
+	            _Ajax2.default.user.getAll().then(function (response) {
+	                return response.json();
+	            }).then(function (data) {
+	                // this.state.failed = false;
+	                _this3.state.users = data;
+	                _this3.setState(_this3.state);
+	            }).catch(function (data) {
+	                // this.state.failed = true;
+	                _this3.state.users = [];
+	                _this3.setState(_this3.state);
+	            });
+	
+	            var fileInput = document.querySelector('input[name=fileName]');
+	            fileInput.addEventListener('dragover', this.handleDragOver, false);
+	            fileInput.addEventListener('drop', this.handleFileSelect, false);
+	        }
+	    }, {
+	        key: 'createUserOptions',
+	        value: function createUserOptions() {
+	            var jsx = [];
+	            if (!this.state.users) {
+	                this.state.users = [];
+	            }
+	            this.state.users.forEach(function (user) {
+	                jsx.push(_react2.default.createElement(
+	                    'option',
+	                    { key: user.id, value: user.id },
+	                    user.name
+	                ));
+	            });
+	
+	            return jsx;
+	        }
+	    }, {
+	        key: 'inputChange',
+	        value: function inputChange(event) {
+	            this.state.task[event.currentTarget.name] = event.currentTarget.value;
+	            this.setState(this.state);
+	        }
+	    }, {
+	        key: 'save',
+	        value: function save() {
+	            var _this4 = this;
+	
+	            var key = 'save';
+	            this.state.task.password = 'password';
+	            this.state.task.role = 1;
+	            if (this.state.task.id) {
+	                key = 'update';
+	            }
+	            return _Ajax2.default.task[key](this.state.task).then(function (response) {
+	                return response.json();
+	            }).then(function (data) {
+	                _this4.setState({ task: data });
+	                _this4.props.update();
+	                _Dom2.default.removeClass(document.body, 'form-open');
+	            }).catch(function (data) {
+	                _this4.setState({ task: _this4.defaultTask });
+	            });
+	        }
+	    }, {
 	        key: 'render',
 	        value: function render() {
-	            return _react2.default.createElement(
-	                'div',
-	                null,
-	                _react2.default.createElement(
-	                    'span',
+	            if (this.state && this.state.task) {
+	                return _react2.default.createElement(
+	                    'div',
+	                    { className: 'task-form' },
+	                    _react2.default.createElement(
+	                        'div',
+	                        null,
+	                        'Name ',
+	                        _react2.default.createElement('input', { type: 'text', name: 'name', value: this.state.task.name, onChange: this.inputChange })
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        null,
+	                        'Description ',
+	                        _react2.default.createElement('input', { type: 'text', name: 'description', value: this.state.task.description, onChange: this.inputChange })
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        null,
+	                        'Due ',
+	                        _react2.default.createElement('input', { type: 'date', name: 'due', value: this.state.task.due, onChange: this.inputChange })
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        null,
+	                        'User ',
+	                        _react2.default.createElement(
+	                            'select',
+	                            { name: 'userId', value: this.state.task.userId, onChange: this.inputChange },
+	                            this.createUserOptions()
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        null,
+	                        'Status ',
+	                        _react2.default.createElement(
+	                            'select',
+	                            { name: 'status', value: this.state.task.status, onChange: this.inputChange },
+	                            _react2.default.createElement(
+	                                'option',
+	                                { value: '1' },
+	                                'Defined'
+	                            ),
+	                            _react2.default.createElement(
+	                                'option',
+	                                { value: '2' },
+	                                'In Progress'
+	                            ),
+	                            _react2.default.createElement(
+	                                'option',
+	                                { value: '3' },
+	                                'Completed'
+	                            )
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        null,
+	                        'File ',
+	                        _react2.default.createElement('input', { type: 'text', name: 'fileName', value: this.state.task.fileName, onChange: this.inputChange, placeholder: 'Drag file here' }),
+	                        _react2.default.createElement('input', { type: 'hidden', name: 'file', value: this.state.task.file, onChange: this.inputChange })
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        null,
+	                        _react2.default.createElement(
+	                            'button',
+	                            { value: 'true', onClick: this.save },
+	                            'Save'
+	                        )
+	                    )
+	                );
+	            } else {
+	                return _react2.default.createElement(
+	                    'div',
 	                    null,
-	                    'TaskForm'
-	                )
-	            );
+	                    'Loading...'
+	                );
+	            }
 	        }
 	    }]);
 	
@@ -23265,7 +23499,7 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _Strings = __webpack_require__(/*! ../../helpers/Strings.js */ 185);
+	var _Strings = __webpack_require__(/*! ../../helpers/Strings.js */ 186);
 	
 	var _Strings2 = _interopRequireDefault(_Strings);
 	
@@ -23326,7 +23560,7 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _Strings = __webpack_require__(/*! ../../helpers/Strings.js */ 185);
+	var _Strings = __webpack_require__(/*! ../../helpers/Strings.js */ 186);
 	
 	var _Strings2 = _interopRequireDefault(_Strings);
 	
@@ -23392,11 +23626,11 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _Strings = __webpack_require__(/*! ../../helpers/Strings.js */ 185);
+	var _Strings = __webpack_require__(/*! ../../helpers/Strings.js */ 186);
 	
 	var _Strings2 = _interopRequireDefault(_Strings);
 	
-	var _Ajax = __webpack_require__(/*! ../../helpers/Ajax.js */ 190);
+	var _Ajax = __webpack_require__(/*! ../../helpers/Ajax.js */ 184);
 	
 	var _Ajax2 = _interopRequireDefault(_Ajax);
 	
@@ -23523,7 +23757,7 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _Strings = __webpack_require__(/*! ../../helpers/Strings.js */ 185);
+	var _Strings = __webpack_require__(/*! ../../helpers/Strings.js */ 186);
 	
 	var _Strings2 = _interopRequireDefault(_Strings);
 	
@@ -23531,7 +23765,7 @@
 	
 	var _Dom2 = _interopRequireDefault(_Dom);
 	
-	var _Ajax = __webpack_require__(/*! ../../helpers/Ajax.js */ 190);
+	var _Ajax = __webpack_require__(/*! ../../helpers/Ajax.js */ 184);
 	
 	var _Ajax2 = _interopRequireDefault(_Ajax);
 	
@@ -23581,7 +23815,7 @@
 	        value: function render() {
 	            return _react2.default.createElement(
 	                'div',
-	                { className: 'user-item' },
+	                { className: 'item user-item' },
 	                _react2.default.createElement(
 	                    'div',
 	                    { className: 'name' },
@@ -23591,11 +23825,6 @@
 	                    'div',
 	                    { className: 'email' },
 	                    this.props.user.email
-	                ),
-	                _react2.default.createElement(
-	                    'div',
-	                    { className: 'role' },
-	                    this.props.user.role === 1 ? 'Admin' : 'Normal User'
 	                ),
 	                _react2.default.createElement(
 	                    'a',
@@ -23636,9 +23865,21 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _Strings = __webpack_require__(/*! ../../helpers/Strings.js */ 185);
+	var _Strings = __webpack_require__(/*! ../../helpers/Strings.js */ 186);
 	
 	var _Strings2 = _interopRequireDefault(_Strings);
+	
+	var _Ajax = __webpack_require__(/*! ../../helpers/Ajax.js */ 184);
+	
+	var _Ajax2 = _interopRequireDefault(_Ajax);
+	
+	var _Dom = __webpack_require__(/*! ../../helpers/Dom.js */ 183);
+	
+	var _Dom2 = _interopRequireDefault(_Dom);
+	
+	var _TaskItem = __webpack_require__(/*! ./TaskItem.jsx */ 197);
+	
+	var _TaskItem2 = _interopRequireDefault(_TaskItem);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -23654,20 +23895,78 @@
 	    function TaskList(props) {
 	        _classCallCheck(this, TaskList);
 	
-	        return _possibleConstructorReturn(this, (TaskList.__proto__ || Object.getPrototypeOf(TaskList)).call(this, props));
-	        // this.getContentForPost = this.getContentForPost.bind(this);
+	        var _this = _possibleConstructorReturn(this, (TaskList.__proto__ || Object.getPrototypeOf(TaskList)).call(this, props));
+	
+	        _this.state = {};
+	        _this.updateData = _this.updateData.bind(_this);
+	        _this.add = _this.add.bind(_this);
+	        _this.componentDidMount = _this.componentDidMount.bind(_this);
+	        _this.componentWillReceiveProps = _this.componentWillReceiveProps.bind(_this);
+	        _this.renderTasks = _this.renderTasks.bind(_this);
+	        return _this;
 	    }
 	
 	    _createClass(TaskList, [{
+	        key: 'updateData',
+	        value: function updateData() {
+	            var _this2 = this;
+	
+	            this.setState({ data: undefined });
+	            return _Ajax2.default.task.getAll().then(function (response) {
+	                return response.json();
+	            }).then(function (data) {
+	                // this.state.failed = false;
+	                _this2.state.tasks = data;
+	                _this2.setState(_this2.state);
+	            }).catch(function (data) {
+	                // this.state.failed = true;
+	                _this2.state.tasks = [];
+	                _this2.setState(_this2.state);
+	            });
+	        }
+	    }, {
+	        key: 'add',
+	        value: function add() {
+	            _Dom2.default.addClass(document.body, 'form-open');
+	            this.props.loadForm({ formType: 'task' });
+	        }
+	    }, {
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
+	            this.updateData();
+	        }
+	    }, {
+	        key: 'componentWillReceiveProps',
+	        value: function componentWillReceiveProps(nextProps) {
+	            this.updateData();
+	        }
+	    }, {
+	        key: 'renderTasks',
+	        value: function renderTasks() {
+	            var self = this;
+	            var tasks = [];
+	            if (this.state.tasks) {
+	                this.state.tasks.forEach(function (task) {
+	                    tasks.push(_react2.default.createElement(_TaskItem2.default, { task: task, key: task.id, loadForm: self.props.loadForm, update: self.props.update }));
+	                });
+	            }
+	            return tasks;
+	        }
+	    }, {
 	        key: 'render',
 	        value: function render() {
 	            return _react2.default.createElement(
 	                'div',
 	                null,
 	                _react2.default.createElement(
-	                    'span',
-	                    null,
-	                    'TaskList'
+	                    'a',
+	                    { onClick: this.add },
+	                    'add'
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'task-list' },
+	                    this.renderTasks()
 	                )
 	            );
 	        }
@@ -23677,6 +23976,124 @@
 	}(_react2.default.Component);
 	
 	exports.default = TaskList;
+
+/***/ },
+/* 197 */
+/*!*****************************************************!*\
+  !*** ./src/client/app/components/task/TaskItem.jsx ***!
+  \*****************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _Strings = __webpack_require__(/*! ../../helpers/Strings.js */ 186);
+	
+	var _Strings2 = _interopRequireDefault(_Strings);
+	
+	var _Dom = __webpack_require__(/*! ../../helpers/Dom.js */ 183);
+	
+	var _Dom2 = _interopRequireDefault(_Dom);
+	
+	var _Ajax = __webpack_require__(/*! ../../helpers/Ajax.js */ 184);
+	
+	var _Ajax2 = _interopRequireDefault(_Ajax);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var TaskItem = function (_React$Component) {
+	    _inherits(TaskItem, _React$Component);
+	
+	    function TaskItem(props) {
+	        _classCallCheck(this, TaskItem);
+	
+	        var _this = _possibleConstructorReturn(this, (TaskItem.__proto__ || Object.getPrototypeOf(TaskItem)).call(this, props));
+	
+	        _this.edit = _this.edit.bind(_this);
+	        _this.delete = _this.delete.bind(_this);
+	        return _this;
+	    }
+	
+	    _createClass(TaskItem, [{
+	        key: 'edit',
+	        value: function edit() {
+	            _Dom2.default.addClass(document.body, 'form-open');
+	            this.props.loadForm({ task: this.props.task, formType: 'task' });
+	        }
+	    }, {
+	        key: 'delete',
+	        value: function _delete() {
+	            var _this2 = this;
+	
+	            return _Ajax2.default.task.delete(this.props.task).then(function (response) {
+	                return response.json();
+	            }).then(function (data) {
+	                _this2.setState({ task: data });
+	                _this2.props.update();
+	            }).catch(function (data) {
+	                _this2.setState({ task: _this2.defaultTask });
+	            });
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(
+	                'div',
+	                { className: 'item task-item' },
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'name' },
+	                    this.props.task.name
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'description' },
+	                    this.props.task.description
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'due' },
+	                    new Date(this.props.task.due).toLocaleDateString()
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'user' },
+	                    this.props.task.userId
+	                ),
+	                _react2.default.createElement(
+	                    'a',
+	                    { onClick: this.edit },
+	                    'edit'
+	                ),
+	                '\xA0',
+	                _react2.default.createElement(
+	                    'a',
+	                    { className: 'delete', onClick: this.delete },
+	                    'delete'
+	                )
+	            );
+	        }
+	    }]);
+	
+	    return TaskItem;
+	}(_react2.default.Component);
+	
+	exports.default = TaskItem;
 
 /***/ }
 /******/ ]);

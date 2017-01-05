@@ -77,7 +77,12 @@ body {
     transform:rotate(-180deg);
 }
 
-.user-item {
+.item:first-child {
+    border-top: 1px solid #222222;
+    margin-top: 5px;
+}
+
+.item {
     padding-top: 5px;
     padding-bottom: 5px;
     border-bottom: 1px solid #222222;
@@ -95,7 +100,6 @@ a {
 .delete:hover {
     color: #bb0000;
 }
-
 
 .form {
     position: fixed;
@@ -142,7 +146,7 @@ a {
     transform:rotate(-180deg);
 }
 
-input, select, button {
+input, select, button, input[type=file] {
     height: 40px;
     width: 300px;
     max-width: 100%;
@@ -150,8 +154,10 @@ input, select, button {
     color: #222222;
     line-height: 20px;
     background-color: #eeeeee;
+    display: inline;
 }
-input {
+
+input, input[type=file] {
     padding-left: 5px;
     padding-right: 5px;
 }
@@ -164,10 +170,10 @@ button:focus {
 }
 
 button:hover {
-    color: #aaaaaa;
+    background-color: #aaaaaa;
 }
 
-.user-form > div {
+.user-form > div, .task-form > div  {
     margin-left: 40px;
     margin-bottom: 20px;
 }
