@@ -26,7 +26,14 @@ class App extends React.Component {
     }
 
     toggleMenu () {
-        document.body.classList.toggle('menu-open');
+        var menuOpen = window.localStorage.getItem('menu-open');
+        if(menuOpen === 'true'){
+            window.localStorage.setItem('menu-open', false);
+            Dom.addClass(document.body, 'menu-open');
+        }else{
+            window.localStorage.setItem('menu-open', true);
+            Dom.removeClass(document.body, 'menu-open');
+        }
     }
 
     closeForm () {
@@ -48,13 +55,13 @@ class App extends React.Component {
     }
 
     componentDidMount () {
-        // Ajax.login.status()
-        //     .then((response) => response.json())
-        //     .then((data) => {
-        //         Helpers.addClass(document.body, 'hide-login');
-        //     }).catch((data) => {
-        //         console.log(data.message);
-        //     });
+        this.toggleMenu();
+        this.toggleMenu();
+        document.addEventListener('keydown', (e) => {
+            if (e.keyCode === 27) {
+                this.closeForm();
+            }
+        });
     }
 
     renderContent () {

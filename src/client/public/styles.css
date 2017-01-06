@@ -115,6 +115,7 @@ a {
     padding: 20px;
     transition: margin-right 0.75s;
     text-align: right;
+    z-index: 10;
 }
 
 .form-open .form {
@@ -216,4 +217,28 @@ button:hover {
     background-color: #ee0000;
     line-height: 40px;
     text-align: center;
+}
+
+.name {
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+.description {
+    font-style: italic;
+}
+
+.defined {
+    background-color: #337ab7;
+    color: #eeeeee;
+}
+
+.in-progress {
+    background-color: #f0ad4e;
+    color: #eeeeee;
+}
+
+.completed {
+    background-color: #5cb85c;
+    color: #eeeeee;
 }

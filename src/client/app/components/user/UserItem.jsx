@@ -30,7 +30,7 @@ class UserItem extends React.Component {
         return (
             <div className="item user-item">
                 <div className="name">{this.props.user.name}</div>
-                <div className="email">{this.props.user.email}</div>
+                <div className="email"><a href={'mailto:' + this.props.user.email}>{this.props.user.email}</a></div>
                 {/* <div className="password">{this.user.password}</div> */}
                 {/* <div className="role">
                     {this.props.user.role === 1 ? 'Admin' : 'Normal User'}

@@ -2,7 +2,7 @@ var validate = require('../db/validation');
 
 module.exports = function(app, jsonParser, Task){
     app.get('/task', function(req, res) {
-        Task.findAll().then(function (task) {
+        Task.findAll({order: [['due'],['name']]}).then(function (task) {
             res.send(JSON.stringify(task));
         });
     });

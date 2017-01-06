@@ -81,19 +81,19 @@
 	
 	var _Form2 = _interopRequireDefault(_Form);
 	
-	var _Home = __webpack_require__(/*! ./components/home/Home.jsx */ 192);
+	var _Home = __webpack_require__(/*! ./components/home/Home.jsx */ 193);
 	
 	var _Home2 = _interopRequireDefault(_Home);
 	
-	var _About = __webpack_require__(/*! ./components/about/About.jsx */ 193);
+	var _About = __webpack_require__(/*! ./components/about/About.jsx */ 194);
 	
 	var _About2 = _interopRequireDefault(_About);
 	
-	var _UserList = __webpack_require__(/*! ./components/user/UserList.jsx */ 194);
+	var _UserList = __webpack_require__(/*! ./components/user/UserList.jsx */ 195);
 	
 	var _UserList2 = _interopRequireDefault(_UserList);
 	
-	var _TaskList = __webpack_require__(/*! ./components/task/TaskList.jsx */ 196);
+	var _TaskList = __webpack_require__(/*! ./components/task/TaskList.jsx */ 197);
 	
 	var _TaskList2 = _interopRequireDefault(_TaskList);
 	
@@ -127,7 +127,14 @@
 	    _createClass(App, [{
 	        key: 'toggleMenu',
 	        value: function toggleMenu() {
-	            document.body.classList.toggle('menu-open');
+	            var menuOpen = window.localStorage.getItem('menu-open');
+	            if (menuOpen === 'true') {
+	                window.localStorage.setItem('menu-open', false);
+	                _Dom2.default.addClass(document.body, 'menu-open');
+	            } else {
+	                window.localStorage.setItem('menu-open', true);
+	                _Dom2.default.removeClass(document.body, 'menu-open');
+	            }
 	        }
 	    }, {
 	        key: 'closeForm',
@@ -154,13 +161,15 @@
 	    }, {
 	        key: 'componentDidMount',
 	        value: function componentDidMount() {
-	            // Ajax.login.status()
-	            //     .then((response) => response.json())
-	            //     .then((data) => {
-	            //         Helpers.addClass(document.body, 'hide-login');
-	            //     }).catch((data) => {
-	            //         console.log(data.message);
-	            //     });
+	            var _this2 = this;
+	
+	            this.toggleMenu();
+	            this.toggleMenu();
+	            document.addEventListener('keydown', function (e) {
+	                if (e.keyCode === 27) {
+	                    _this2.closeForm();
+	                }
+	            });
 	        }
 	    }, {
 	        key: 'renderContent',
@@ -23260,7 +23269,7 @@
 	
 	var _Dom2 = _interopRequireDefault(_Dom);
 	
-	var _DateHelper = __webpack_require__(/*! ../../helpers/DateHelper.js */ 198);
+	var _DateHelper = __webpack_require__(/*! ../../helpers/DateHelper.js */ 192);
 	
 	var _DateHelper2 = _interopRequireDefault(_DateHelper);
 	
@@ -23535,6 +23544,31 @@
 
 /***/ },
 /* 192 */
+/*!**********************************************!*\
+  !*** ./src/client/app/helpers/DateHelper.js ***!
+  \**********************************************/
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	var DateHelper = {
+	    fixDate: function fixDate(date) {
+	        var d = new Date(date);
+	        var month = (d.getMonth() + 1).toString().length === 1 ? '0' + (d.getMonth() + 1).toString() : d.getMonth() + 1;
+	        var day = (d.getDate() + 1).toString().length === 1 ? '0' + (d.getDate() + 1).toString() : d.getDate() + 1;
+	        return d.getUTCFullYear() + '-' + month + '-' + day;
+	    },
+	    daysUntil: function daysUntil(date) {
+	        return Math.round(Math.abs((new Date().getTime() - date.getTime()) / (24 * 60 * 60 * 1000)));
+	    }
+	};
+	exports.default = DateHelper;
+
+/***/ },
+/* 193 */
 /*!*************************************************!*\
   !*** ./src/client/app/components/home/Home.jsx ***!
   \*************************************************/
@@ -23595,7 +23629,7 @@
 	exports.default = Home;
 
 /***/ },
-/* 193 */
+/* 194 */
 /*!***************************************************!*\
   !*** ./src/client/app/components/about/About.jsx ***!
   \***************************************************/
@@ -23661,7 +23695,7 @@
 	exports.default = About;
 
 /***/ },
-/* 194 */
+/* 195 */
 /*!*****************************************************!*\
   !*** ./src/client/app/components/user/UserList.jsx ***!
   \*****************************************************/
@@ -23691,7 +23725,7 @@
 	
 	var _Dom2 = _interopRequireDefault(_Dom);
 	
-	var _UserItem = __webpack_require__(/*! ./UserItem.jsx */ 195);
+	var _UserItem = __webpack_require__(/*! ./UserItem.jsx */ 196);
 	
 	var _UserItem2 = _interopRequireDefault(_UserItem);
 	
@@ -23792,7 +23826,7 @@
 	exports.default = UserList;
 
 /***/ },
-/* 195 */
+/* 196 */
 /*!*****************************************************!*\
   !*** ./src/client/app/components/user/UserItem.jsx ***!
   \*****************************************************/
@@ -23877,7 +23911,11 @@
 	                _react2.default.createElement(
 	                    'div',
 	                    { className: 'email' },
-	                    this.props.user.email
+	                    _react2.default.createElement(
+	                        'a',
+	                        { href: 'mailto:' + this.props.user.email },
+	                        this.props.user.email
+	                    )
 	                ),
 	                _react2.default.createElement(
 	                    'a',
@@ -23900,7 +23938,7 @@
 	exports.default = UserItem;
 
 /***/ },
-/* 196 */
+/* 197 */
 /*!*****************************************************!*\
   !*** ./src/client/app/components/task/TaskList.jsx ***!
   \*****************************************************/
@@ -23930,7 +23968,7 @@
 	
 	var _Dom2 = _interopRequireDefault(_Dom);
 	
-	var _TaskItem = __webpack_require__(/*! ./TaskItem.jsx */ 197);
+	var _TaskItem = __webpack_require__(/*! ./TaskItem.jsx */ 198);
 	
 	var _TaskItem2 = _interopRequireDefault(_TaskItem);
 	
@@ -24042,7 +24080,7 @@
 	exports.default = TaskList;
 
 /***/ },
-/* 197 */
+/* 198 */
 /*!*****************************************************!*\
   !*** ./src/client/app/components/task/TaskItem.jsx ***!
   \*****************************************************/
@@ -24067,6 +24105,10 @@
 	var _Dom = __webpack_require__(/*! ../../helpers/Dom.js */ 183);
 	
 	var _Dom2 = _interopRequireDefault(_Dom);
+	
+	var _DateHelper = __webpack_require__(/*! ../../helpers/DateHelper.js */ 192);
+	
+	var _DateHelper2 = _interopRequireDefault(_DateHelper);
 	
 	var _Ajax = __webpack_require__(/*! ../../helpers/Ajax.js */ 184);
 	
@@ -24165,54 +24207,104 @@
 	    }, {
 	        key: 'render',
 	        value: function render() {
+	            var dueDate = new Date(this.props.task.due);
+	            var daysleft = _DateHelper2.default.daysUntil(dueDate);
 	            return _react2.default.createElement(
 	                'div',
 	                { className: 'item task-item' },
 	                _react2.default.createElement(
 	                    'div',
-	                    { className: 'name' },
-	                    this.props.task.name
+	                    { className: 'row' },
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-sm-6' },
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'name' },
+	                            this.props.task.name
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-sm-6' },
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'description' },
+	                            this.props.task.description
+	                        )
+	                    )
 	                ),
 	                _react2.default.createElement(
 	                    'div',
-	                    { className: 'description' },
-	                    this.props.task.description
+	                    { className: 'row' },
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-sm-6' },
+	                        _react2.default.createElement(
+	                            'div',
+	                            null,
+	                            'Status: ',
+	                            _react2.default.createElement(
+	                                'span',
+	                                { className: 'status ' + this.resolveStatusClass(this.props.task.status) },
+	                                this.resolveStatus(this.props.task.status)
+	                            )
+	                        ),
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'due' },
+	                            dueDate.toLocaleDateString() + ' (' + daysleft + ' days left)'
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-sm-6' },
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'owner' },
+	                            'Owner: ',
+	                            this.props.task.owner ? this.props.task.owner.name : 'No owner assigned to task'
+	                        ),
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'user' },
+	                            'Assigned: ',
+	                            this.props.task.user ? this.props.task.user.name : 'No user assigned to task'
+	                        )
+	                    )
 	                ),
 	                _react2.default.createElement(
 	                    'div',
-	                    { className: 'due' },
-	                    new Date(this.props.task.due).toLocaleDateString()
+	                    { className: 'row' },
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-sm-12' },
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'file' },
+	                            'File: ',
+	                            this.showFileOrNot(this.props.task.fileName, this.props.task.file)
+	                        )
+	                    )
 	                ),
 	                _react2.default.createElement(
 	                    'div',
-	                    { className: 'status ' + this.resolveStatusClass() },
-	                    this.resolveStatus(this.props.task.status)
-	                ),
-	                _react2.default.createElement(
-	                    'div',
-	                    { className: 'owner' },
-	                    this.props.task.owner ? this.props.task.owner.name : 'No owner assigned to task'
-	                ),
-	                _react2.default.createElement(
-	                    'div',
-	                    { className: 'user' },
-	                    this.props.task.user ? this.props.task.user.name : 'No user assigned to task'
-	                ),
-	                _react2.default.createElement(
-	                    'div',
-	                    { className: 'file' },
-	                    this.showFileOrNot(this.props.task.fileName, this.props.task.file)
-	                ),
-	                _react2.default.createElement(
-	                    'a',
-	                    { onClick: this.edit },
-	                    'edit'
-	                ),
-	                '\xA0',
-	                _react2.default.createElement(
-	                    'a',
-	                    { className: 'delete', onClick: this.delete },
-	                    'delete'
+	                    { className: 'row' },
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-sm-12' },
+	                        _react2.default.createElement(
+	                            'a',
+	                            { onClick: this.edit },
+	                            'edit'
+	                        ),
+	                        '\xA0',
+	                        _react2.default.createElement(
+	                            'a',
+	                            { className: 'delete', onClick: this.delete },
+	                            'delete'
+	                        )
+	                    )
 	                )
 	            );
 	        }
@@ -24222,28 +24314,6 @@
 	}(_react2.default.Component);
 	
 	exports.default = TaskItem;
-
-/***/ },
-/* 198 */
-/*!**********************************************!*\
-  !*** ./src/client/app/helpers/DateHelper.js ***!
-  \**********************************************/
-/***/ function(module, exports) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	var DateHelper = {
-	    fixDate: function fixDate(date) {
-	        var d = new Date(date);
-	        var month = (d.getMonth() + 1).toString().length === 1 ? '0' + (d.getMonth() + 1).toString() : d.getMonth() + 1;
-	        var day = (d.getDate() + 1).toString().length === 1 ? '0' + (d.getDate() + 1).toString() : d.getDate() + 1;
-	        return d.getUTCFullYear() + '-' + month + '-' + day;
-	    }
-	};
-	exports.default = DateHelper;
 
 /***/ }
 /******/ ]);
