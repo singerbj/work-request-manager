@@ -10,6 +10,7 @@ class TaskItem extends React.Component {
         this.delete = this.delete.bind(this);
         this.resolveStatusClass = this.resolveStatusClass.bind(this);
         this.resolveStatus = this.resolveStatus.bind(this);
+        this.showFileOrNot = this.showFileOrNot.bind(this);
     }
 
     edit () {
@@ -52,6 +53,17 @@ class TaskItem extends React.Component {
         return r;
     }
 
+    showFileOrNot (fileName, file) {
+        if(fileName && file){
+                // var json = file,//JSON.stringify(file),
+                // blob = new Blob([json], {type: "octet/stream"}),
+                // url = window.URL.createObjectURL(blob);
+            return (<a href={file} download={fileName}>{fileName}</a>);
+        }else{
+            return (<span>No file uploaded</span>);
+        }
+    }
+
     render() {
         return (
             <div className="item task-item">
@@ -61,6 +73,7 @@ class TaskItem extends React.Component {
                 <div className={'status ' + this.resolveStatusClass()}>{this.resolveStatus(this.props.task.status)}</div>
                 <div className="owner">{this.props.task.owner ? this.props.task.owner.name : 'No owner assigned to task'}</div>
                 <div className="user">{this.props.task.user ? this.props.task.user.name : 'No user assigned to task'}</div>
+                <div className="file">{this.showFileOrNot(this.props.task.fileName, this.props.task.file)}</div>
                 <a onClick={this.edit}>edit</a>
                 &nbsp;
                 <a className="delete" onClick={this.delete}>delete</a>

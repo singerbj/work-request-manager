@@ -15,7 +15,7 @@ module.exports = function(app, jsonParser, User){
     app.post('/user', jsonParser, function(req, res) {
         var body = req.body;
         body.role = parseInt(body.role, 10);
-        var result = validate.user.create(body);
+        var result = validate.user(body);
         if(result === true){
             User.create(body).then(function(user){
                 res.send(JSON.stringify(user));
@@ -29,9 +29,15 @@ module.exports = function(app, jsonParser, User){
         var body = req.body;
         body.role = parseInt(body.role, 10);
         if(body.id){
-            User.update(body, {where: {id: body.id}}).then(function(user){
-                res.send(JSON.stringify(user));
-            });
+            var result = validate.user(body);
+            if(result === true){
+                User.update(body, {where: {id: body.id}}).then(function(user){
+                    res.send(JSON.stringify(user));
+                });
+            }else{
+                res.status(422);
+                res.send(JSON.stringify({error: result}));
+            }
         }else{
             res.status(422);
             res.send(JSON.stringify({error: 'No id specified.'}));

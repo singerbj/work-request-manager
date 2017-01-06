@@ -17,7 +17,7 @@ module.exports = function(app, jsonParser, Task){
         body.userId = parseInt(body.userId, 10);
         body.ownerId = parseInt(body.ownerId, 10);
         body.status = parseInt(body.status, 10);
-        var result = validate.task.create(body);
+        var result = validate.task(body);
         if(result === true){
             Task.create(body).then(function(task){
                 res.send(JSON.stringify(task));
@@ -33,9 +33,15 @@ module.exports = function(app, jsonParser, Task){
         body.ownerId = parseInt(body.ownerId, 10);
         body.status = parseInt(body.status, 10);
         if(body.id){
-            Task.update(body, {where: {id: body.id}}).then(function(task){
-                res.send(JSON.stringify(task));
-            });
+            var result = validate.task(body);
+            if(result === true){
+                Task.update(body, {where: {id: body.id}}).then(function(task){
+                    res.send(JSON.stringify(task));
+                });
+            }else{
+                res.status(422);
+                res.send(JSON.stringify({error: result}));
+            }
         }else{
             res.status(422);
             res.send(JSON.stringify({error: 'No id specified.'}));

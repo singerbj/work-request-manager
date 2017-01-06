@@ -64,7 +64,7 @@ class UserForm extends React.Component {
                     this.setState({error: data.error});
                 }
             }).catch((data) => {
-                this.setState({user: Dom.clone(defaultUser)});
+                console.log(data);
             });
     }
 

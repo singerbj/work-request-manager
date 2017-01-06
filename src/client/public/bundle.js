@@ -23177,7 +23177,7 @@
 	                    _this3.setState({ error: data.error });
 	                }
 	            }).catch(function (data) {
-	                _this3.setState({ user: _Dom2.default.clone(defaultUser) });
+	                console.log(data);
 	            });
 	        }
 	    }, {
@@ -23319,15 +23319,20 @@
 	        value: function handleFileSelect(e) {
 	            e.stopPropagation();
 	            e.preventDefault();
+	            this.state.error = null;
 	            var self = this;
-	            var files = e.dataTransfer.files; // FileList object.
+	            var files = e.dataTransfer.files;
 	            var file = files[0];
 	            var reader = new FileReader();
 	            reader.onload = function (contents) {
 	                return function (e) {
-	                    self.state.task.file = e.target.result;
-	                    self.state.task.fileName = file.name;
-	                    self.setState(self.state);
+	                    if (e.target.result.length <= 10485760) {
+	                        self.state.task.file = e.target.result;
+	                        self.state.task.fileName = file.name;
+	                        self.setState(self.state);
+	                    } else {
+	                        self.setState({ error: 'File too large' });
+	                    }
 	                };
 	            }(file);
 	            reader.readAsDataURL(file);
@@ -23337,7 +23342,7 @@
 	        value: function handleDragOver(e) {
 	            e.stopPropagation();
 	            e.preventDefault();
-	            e.dataTransfer.dropEffect = 'copy'; // Explicitly show this is a copy.
+	            e.dataTransfer.dropEffect = 'copy';
 	        }
 	    }, {
 	        key: 'componentWillReceiveProps',
@@ -23415,7 +23420,7 @@
 	                    _this4.setState({ error: data.error });
 	                }
 	            }).catch(function (data) {
-	                _this4.setState({ task: _Dom2.default.clone(defaultTask) });
+	                console.log(data);
 	            });
 	        }
 	    }, {
@@ -24087,6 +24092,7 @@
 	        _this.delete = _this.delete.bind(_this);
 	        _this.resolveStatusClass = _this.resolveStatusClass.bind(_this);
 	        _this.resolveStatus = _this.resolveStatus.bind(_this);
+	        _this.showFileOrNot = _this.showFileOrNot.bind(_this);
 	        return _this;
 	    }
 	
@@ -24137,6 +24143,26 @@
 	            return r;
 	        }
 	    }, {
+	        key: 'showFileOrNot',
+	        value: function showFileOrNot(fileName, file) {
+	            if (fileName && file) {
+	                // var json = file,//JSON.stringify(file),
+	                // blob = new Blob([json], {type: "octet/stream"}),
+	                // url = window.URL.createObjectURL(blob);
+	                return _react2.default.createElement(
+	                    'a',
+	                    { href: file, download: fileName },
+	                    fileName
+	                );
+	            } else {
+	                return _react2.default.createElement(
+	                    'span',
+	                    null,
+	                    'No file uploaded'
+	                );
+	            }
+	        }
+	    }, {
 	        key: 'render',
 	        value: function render() {
 	            return _react2.default.createElement(
@@ -24171,6 +24197,11 @@
 	                    'div',
 	                    { className: 'user' },
 	                    this.props.task.user ? this.props.task.user.name : 'No user assigned to task'
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'file' },
+	                    this.showFileOrNot(this.props.task.fileName, this.props.task.file)
 	                ),
 	                _react2.default.createElement(
 	                    'a',

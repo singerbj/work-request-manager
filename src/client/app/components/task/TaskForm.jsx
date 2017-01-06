@@ -39,15 +39,20 @@ class TaskForm extends React.Component {
     handleFileSelect (e) {
         e.stopPropagation();
         e.preventDefault();
+        this.state.error = null;
         var self = this;
-        var files = e.dataTransfer.files; // FileList object.
+        var files = e.dataTransfer.files;
         var file = files[0];
         var reader = new FileReader();
         reader.onload = (function(contents) {
             return function(e) {
-                self.state.task.file = e.target.result;
-                self.state.task.fileName = file.name;
-                self.setState(self.state);
+                if(e.target.result.length <= 10485760){
+                    self.state.task.file = e.target.result;
+                    self.state.task.fileName = file.name;
+                    self.setState(self.state);
+                }else{
+                    self.setState({error: 'File too large'});
+                }
             };
         })(file);
         reader.readAsDataURL(file);
@@ -56,7 +61,7 @@ class TaskForm extends React.Component {
     handleDragOver (e) {
         e.stopPropagation();
         e.preventDefault();
-        e.dataTransfer.dropEffect = 'copy'; // Explicitly show this is a copy.
+        e.dataTransfer.dropEffect = 'copy';
     }
 
     componentWillReceiveProps(nextProps) {
@@ -123,7 +128,7 @@ class TaskForm extends React.Component {
                     this.setState({error: data.error});
                 }
             }).catch((data) => {
-                this.setState({task: Dom.clone(defaultTask)});
+                console.log(data);
             });
     }
 
