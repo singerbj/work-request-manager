@@ -8,6 +8,8 @@ class TaskItem extends React.Component {
         super(props);
         this.edit = this.edit.bind(this);
         this.delete = this.delete.bind(this);
+        this.resolveStatusClass = this.resolveStatusClass.bind(this);
+        this.resolveStatus = this.resolveStatus.bind(this);
     }
 
     edit () {
@@ -26,13 +28,39 @@ class TaskItem extends React.Component {
             });
     }
 
+    resolveStatusClass (status) {
+        var r;
+        if(status === 1){
+            r = 'defined';
+        }else if(status === 2){
+            r = 'in-Progress';
+        }else if(status === 3){
+            r = 'completed';
+        }
+        return r;
+    }
+
+    resolveStatus (status) {
+        var r;
+        if(status === 1){
+            r = 'Defined';
+        }else if(status === 2){
+            r = 'In Progress';
+        }else if(status === 3){
+            r = 'Completed';
+        }
+        return r;
+    }
+
     render() {
         return (
             <div className="item task-item">
                 <div className="name">{this.props.task.name}</div>
                 <div className="description">{this.props.task.description}</div>
                 <div className="due">{(new Date(this.props.task.due)).toLocaleDateString()}</div>
-                <div className="user">{this.props.task.userId}</div>
+                <div className={'status ' + this.resolveStatusClass()}>{this.resolveStatus(this.props.task.status)}</div>
+                <div className="owner">{this.props.task.owner ? this.props.task.owner.name : 'No owner assigned to task'}</div>
+                <div className="user">{this.props.task.user ? this.props.task.user.name : 'No user assigned to task'}</div>
                 <a onClick={this.edit}>edit</a>
                 &nbsp;
                 <a className="delete" onClick={this.delete}>delete</a>

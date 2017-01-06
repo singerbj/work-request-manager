@@ -21,6 +21,18 @@ var Dom = {
             var reg = new RegExp('(\\s|^)' + className + '(\\s|$)');
             el.className=el.className.replace(reg, ' ');
         }
+    },
+    clone (obj) {
+        if (obj === null || typeof obj !== 'object') {
+            return obj;
+        }
+
+        var temp = obj.constructor();
+        for (var key in obj) {
+            temp[key] = this.clone(obj[key]);
+        }
+
+        return temp;
     }
 };
 export default Dom;

@@ -1,19 +1,20 @@
 import React from 'react';
 import Ajax from '../../helpers/Ajax.js';
 import Dom from '../../helpers/Dom.js';
+import DateHelper from '../../helpers/DateHelper.js';
+
+const defaultTask = {name:'', description:'', due: DateHelper.fixDate((new Date())), userId: '0', ownerId: '0', status: '1', fileName: '', file: ''};
 
 class TaskForm extends React.Component {
     constructor(props) {
         super(props);
-        this.defaultTask = {name:'', description:'', due: this.fixDate((new Date())), userId: '0', status: '0', fileName: '', file: ''};
         if(props.task && props.task.id){
-            props.task.due = this.fixDate(props.task.due);
+            props.task.due = DateHelper.fixDate(props.task.due);
             this.state = {task: props.task};
             this.getTask(props.task);
         }else{
-            this.state = {task: this.defaultTask};
+            this.state = {task: Dom.clone(defaultTask)};
         }
-        this.fixDate = this.fixDate.bind(this);
         this.getTask = this.getTask.bind(this);
         this.handleFileSelect = this.handleFileSelect.bind(this);
         this.handleDragOver = this.handleDragOver.bind(this);
@@ -24,21 +25,14 @@ class TaskForm extends React.Component {
         this.save = this.save.bind(this);
     }
 
-    fixDate(date){
-        var d = new Date(date);
-        var month = (d.getMonth() + 1).toString().length === 1 ? '0' + (d.getMonth() + 1).toString() : (d.getMonth() + 1);
-        var day = (d.getDate() + 1).toString().length === 1 ? '0' + (d.getDate() + 1).toString() : (d.getDate() + 1);
-        return d.getUTCFullYear() + '-' + month + '-' + day;
-    }
-
     getTask (task) {
         return Ajax.task.getOne(task)
         .then((response) => response.json())
         .then((data) => {
-            data.due = this.fixDate(data.due);
+            data.due = DateHelper.fixDate(data.due);
             this.setState({task: data});
         }).catch((data) => {
-            this.setState({task: this.defaultTask});
+            this.setState({task: Dom.clone(defaultTask)});
         });
     }
 
@@ -51,9 +45,8 @@ class TaskForm extends React.Component {
         var reader = new FileReader();
         reader.onload = (function(contents) {
             return function(e) {
-                document.querySelector('input[name=file]').value = e.target.result;
-                document.querySelector('input[name=fileName]').value = file.name;
                 self.state.task.file = e.target.result;
+                self.state.task.fileName = file.name;
                 self.setState(self.state);
             };
         })(file);
@@ -68,11 +61,12 @@ class TaskForm extends React.Component {
 
     componentWillReceiveProps(nextProps) {
         if(nextProps.task && nextProps.task.id){
-            this.setState({task: nextProps.task}, function(){
+            nextProps.task.due = DateHelper.fixDate(nextProps.task.due);
+            this.setState({task: nextProps.task, error: null}, function(){
                 this.getTask(nextProps.task);
             });
         }else{
-            this.setState({task: this.defaultTask});
+            this.setState({task: Dom.clone(defaultTask), error: null});
         }
     }
 
@@ -88,10 +82,6 @@ class TaskForm extends React.Component {
             this.state.users = [];
             this.setState(this.state);
         });
-
-        var fileInput = document.querySelector('input[name=fileName]');
-        fileInput.addEventListener('dragover', this.handleDragOver, false);
-        fileInput.addEventListener('drop', this.handleFileSelect, false);
     }
 
     createUserOptions () {
@@ -99,12 +89,12 @@ class TaskForm extends React.Component {
         if(!this.state.users){
             this.state.users = [];
         }
-        this.state.users.forEach(function(user){
+        jsx.push(<option key="0" value="0"></option>);
+        this.state.users.forEach(function(user, index){
             jsx.push(
                 <option key={user.id} value={user.id}>{user.name}</option>
             );
         });
-
         return jsx;
     }
 
@@ -117,23 +107,28 @@ class TaskForm extends React.Component {
         var key = 'save';
         this.state.task.password = 'password';
         this.state.task.role = 1;
+        this.state.error = null;
         if(this.state.task.id){
             key = 'update';
         }
         return Ajax.task[key](this.state.task)
             .then((response) => response.json())
             .then((data) => {
-                this.setState({task: data});
-                this.props.update();
-                Dom.removeClass(document.body,'form-open');
+                if(!data.error){
+                    this.setState({task: Dom.clone(defaultTask)});
+                    this.props.update();
+                    Dom.removeClass(document.body,'form-open');
+                }else{
+                    console.log(data.error);
+                    this.setState({error: data.error});
+                }
             }).catch((data) => {
-                this.setState({task:this.defaultTask});
+                this.setState({task: Dom.clone(defaultTask)});
             });
     }
 
     render() {
         if(this.state && this.state.task){
-            // console.log(this.state.task);
             return (
                 <div className="task-form">
                     <div>
@@ -146,8 +141,12 @@ class TaskForm extends React.Component {
                         Due <input type="date" name="due" value={this.state.task.due} onChange={this.inputChange}/>
                     </div>
                     <div>
+                        Owner <select name="ownerId" value={this.state.task.ownerId} onChange={this.inputChange}>
+                            {this.createUserOptions()}
+                        </select>
+                    </div>
+                    <div>
                         User <select name="userId" value={this.state.task.userId} onChange={this.inputChange}>
-                            {/* <option value="1">User 1</option> */}
                             {this.createUserOptions()}
                         </select>
                     </div>
@@ -159,11 +158,14 @@ class TaskForm extends React.Component {
                         </select>
                     </div>
                     <div>
-                        File <input type="text" name="fileName" value={this.state.task.fileName} onChange={this.inputChange} placeholder="Drag file here" />
+                        File <input type="text" name="fileName" value={this.state.task.fileName} onChange={this.inputChange} onDragOver={this.handleDragOver} onDrop={this.handleFileSelect} placeholder="Drag file here" />
                         <input type="hidden" name="file" value={this.state.task.file} onChange={this.inputChange}/>
                     </div>
                     <div>
                         <button value="true" onClick={this.save}>Save</button>
+                    </div>
+                    <div>
+                        <div className={'error ' + (!this.state.error ? 'hidden' : '')}>{this.state.error}</div>
                     </div>
                 </div>
             )

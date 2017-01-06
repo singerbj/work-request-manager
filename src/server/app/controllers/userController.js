@@ -21,6 +21,7 @@ module.exports = function(app, jsonParser, User){
                 res.send(JSON.stringify(user));
             });
         }else{
+            res.status(422);
             res.send(JSON.stringify({error: result}));
         }
     });
@@ -32,6 +33,7 @@ module.exports = function(app, jsonParser, User){
                 res.send(JSON.stringify(user));
             });
         }else{
+            res.status(422);
             res.send(JSON.stringify({error: 'No id specified.'}));
         }
     });

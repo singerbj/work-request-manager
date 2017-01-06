@@ -40,6 +40,7 @@ class App extends React.Component {
     navigate (){
         var hash = document.location.hash.replace('#','');
         this.setState({title: hash});
+        Dom.removeClass(document.body,'form-open');
     }
 
     update () {

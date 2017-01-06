@@ -1,6 +1,6 @@
 var q = require('q');
 var Sequelize = require('sequelize');
-var forceSync = true;
+var forceSync = false;
 
 var sequelize = new Sequelize('work_request_manager', 'postgres', '', {
   host: 'localhost',
@@ -68,9 +68,17 @@ var Task = sequelize.define('task',
             type: Sequelize.INTEGER,
             field: 'user_id'
         },
+        ownerId: {
+            type: Sequelize.INTEGER,
+            field: 'owner_id'
+        },
         status: {
             type: Sequelize.INTEGER,
             field: 'status'
+        },
+        fileName: {
+            type: Sequelize.STRING,
+            field: 'file_name'
         },
         file: {
             type: Sequelize.STRING(10485760),

@@ -17,16 +17,23 @@ class TaskList extends React.Component {
     }
 
     updateData () {
+        var self = this;
         this.setState({data: undefined});
-        return Ajax.task.getAll()
+        Ajax.task.getAll()
         .then((response) => response.json())
         .then((data) => {
-            // this.state.failed = false;
             this.state.tasks = data;
             this.setState(this.state);
-        }).catch((data) => {
-            // this.state.failed = true;
-            this.state.tasks = [];
+        });
+        Ajax.user.getAll()
+        .then((response) => response.json())
+        .then((data) => {
+            this.state.userMap = {};
+            if(data && data.length){
+                data.forEach(function(user){
+                    self.state.userMap[user.id] = user;
+                });
+            }
             this.setState(this.state);
         });
     }
@@ -49,6 +56,10 @@ class TaskList extends React.Component {
         var tasks = [];
         if(this.state.tasks){
             this.state.tasks.forEach(function(task){
+                if(self.state.userMap){
+                    task.user = self.state.userMap[task.userId];
+                    task.owner = self.state.userMap[task.ownerId];
+                }
                 tasks.push(
                     <TaskItem task={task} key={task.id} loadForm={self.props.loadForm} update={self.props.update}/>
                 );

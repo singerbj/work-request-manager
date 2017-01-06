@@ -2,15 +2,17 @@ import React from 'react';
 import Ajax from '../../helpers/Ajax.js';
 import Dom from '../../helpers/Dom.js';
 
+const defaultUser = {name:'', email:'', password:'', role: '1'};
+
 class UserForm extends React.Component {
     constructor(props) {
         super(props);
-        this.defaultUser = {name:'', email:'', password:'', role: '1'};
+
         if(props.user && props.user.id){
             this.state = {user: props.user};
             this.getUser(props.user);
         }else{
-            this.state = {user: this.defaultUser};
+            this.state = {user: Dom.clone(defaultUser)};
         }
         this.getUser = this.getUser.bind(this);
         this.componentWillReceiveProps = this.componentWillReceiveProps.bind(this);
@@ -24,17 +26,17 @@ class UserForm extends React.Component {
         .then((data) => {
             this.setState({user: data});
         }).catch((data) => {
-            this.setState({user: this.defaultUser});
+            this.setState({user: Dom.clone(defaultUser)});
         });
     }
 
     componentWillReceiveProps(nextProps) {
         if(nextProps.user && nextProps.user.id){
-            this.setState({user: nextProps.user}, function(){
+            this.setState({user: nextProps.user, error: null}, function(){
                 this.getUser(nextProps.user);
             });
         }else{
-            this.setState({user: this.defaultUser});
+            this.setState({user: Dom.clone(defaultUser), error: null});
         }
     }
 
@@ -47,17 +49,22 @@ class UserForm extends React.Component {
         var key = 'save';
         this.state.user.password = 'password';
         this.state.user.role = 1;
+        this.state.error = null;
         if(this.state.user.id){
             key = 'update';
         }
         return Ajax.user[key](this.state.user)
             .then((response) => response.json())
             .then((data) => {
-                this.setState({user: data});
-                this.props.update();
-                Dom.removeClass(document.body,'form-open');
+                if(!data.error){
+                    this.setState({user: Dom.clone(defaultUser)});
+                    this.props.update();
+                    Dom.removeClass(document.body,'form-open');
+                }else{
+                    this.setState({error: data.error});
+                }
             }).catch((data) => {
-                this.setState({user:this.defaultUser});
+                this.setState({user: Dom.clone(defaultUser)});
             });
     }
 
@@ -83,6 +90,9 @@ class UserForm extends React.Component {
                     </div> */}
                     <div>
                         <button value="true" onClick={this.save}>Save</button>
+                    </div>
+                    <div>
+                        <div className={'error ' + (!this.state.error ? 'hidden' : '')}>{this.state.error}</div>
                     </div>
                 </div>
             )

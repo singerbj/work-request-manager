@@ -144,6 +144,7 @@
 	        value: function navigate() {
 	            var hash = document.location.hash.replace('#', '');
 	            this.setState({ title: hash });
+	            _Dom2.default.removeClass(document.body, 'form-open');
 	        }
 	    }, {
 	        key: 'update',
@@ -22480,6 +22481,9 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
+	
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+	
 	var Dom = {
 	    hasClass: function hasClass(el, className) {
 	        if (el.classList) {
@@ -22502,6 +22506,18 @@
 	            var reg = new RegExp('(\\s|^)' + className + '(\\s|$)');
 	            el.className = el.className.replace(reg, ' ');
 	        }
+	    },
+	    clone: function clone(obj) {
+	        if (obj === null || (typeof obj === 'undefined' ? 'undefined' : _typeof(obj)) !== 'object') {
+	            return obj;
+	        }
+	
+	        var temp = obj.constructor();
+	        for (var key in obj) {
+	            temp[key] = this.clone(obj[key]);
+	        }
+	
+	        return temp;
 	    }
 	};
 	exports.default = Dom;
@@ -23085,6 +23101,8 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
+	var defaultUser = { name: '', email: '', password: '', role: '1' };
+	
 	var UserForm = function (_React$Component) {
 	    _inherits(UserForm, _React$Component);
 	
@@ -23093,12 +23111,11 @@
 	
 	        var _this = _possibleConstructorReturn(this, (UserForm.__proto__ || Object.getPrototypeOf(UserForm)).call(this, props));
 	
-	        _this.defaultUser = { name: '', email: '', password: '', role: '1' };
 	        if (props.user && props.user.id) {
 	            _this.state = { user: props.user };
 	            _this.getUser(props.user);
 	        } else {
-	            _this.state = { user: _this.defaultUser };
+	            _this.state = { user: _Dom2.default.clone(defaultUser) };
 	        }
 	        _this.getUser = _this.getUser.bind(_this);
 	        _this.componentWillReceiveProps = _this.componentWillReceiveProps.bind(_this);
@@ -23117,18 +23134,18 @@
 	            }).then(function (data) {
 	                _this2.setState({ user: data });
 	            }).catch(function (data) {
-	                _this2.setState({ user: _this2.defaultUser });
+	                _this2.setState({ user: _Dom2.default.clone(defaultUser) });
 	            });
 	        }
 	    }, {
 	        key: 'componentWillReceiveProps',
 	        value: function componentWillReceiveProps(nextProps) {
 	            if (nextProps.user && nextProps.user.id) {
-	                this.setState({ user: nextProps.user }, function () {
+	                this.setState({ user: nextProps.user, error: null }, function () {
 	                    this.getUser(nextProps.user);
 	                });
 	            } else {
-	                this.setState({ user: this.defaultUser });
+	                this.setState({ user: _Dom2.default.clone(defaultUser), error: null });
 	            }
 	        }
 	    }, {
@@ -23145,17 +23162,22 @@
 	            var key = 'save';
 	            this.state.user.password = 'password';
 	            this.state.user.role = 1;
+	            this.state.error = null;
 	            if (this.state.user.id) {
 	                key = 'update';
 	            }
 	            return _Ajax2.default.user[key](this.state.user).then(function (response) {
 	                return response.json();
 	            }).then(function (data) {
-	                _this3.setState({ user: data });
-	                _this3.props.update();
-	                _Dom2.default.removeClass(document.body, 'form-open');
+	                if (!data.error) {
+	                    _this3.setState({ user: _Dom2.default.clone(defaultUser) });
+	                    _this3.props.update();
+	                    _Dom2.default.removeClass(document.body, 'form-open');
+	                } else {
+	                    _this3.setState({ error: data.error });
+	                }
 	            }).catch(function (data) {
-	                _this3.setState({ user: _this3.defaultUser });
+	                _this3.setState({ user: _Dom2.default.clone(defaultUser) });
 	            });
 	        }
 	    }, {
@@ -23184,6 +23206,15 @@
 	                            'button',
 	                            { value: 'true', onClick: this.save },
 	                            'Save'
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        null,
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'error ' + (!this.state.error ? 'hidden' : '') },
+	                            this.state.error
 	                        )
 	                    )
 	                );
@@ -23229,6 +23260,10 @@
 	
 	var _Dom2 = _interopRequireDefault(_Dom);
 	
+	var _DateHelper = __webpack_require__(/*! ../../helpers/DateHelper.js */ 198);
+	
+	var _DateHelper2 = _interopRequireDefault(_DateHelper);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -23236,6 +23271,8 @@
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var defaultTask = { name: '', description: '', due: _DateHelper2.default.fixDate(new Date()), userId: '0', ownerId: '0', status: '1', fileName: '', file: '' };
 	
 	var TaskForm = function (_React$Component) {
 	    _inherits(TaskForm, _React$Component);
@@ -23245,15 +23282,13 @@
 	
 	        var _this = _possibleConstructorReturn(this, (TaskForm.__proto__ || Object.getPrototypeOf(TaskForm)).call(this, props));
 	
-	        _this.defaultTask = { name: '', description: '', due: _this.fixDate(new Date()), userId: '0', status: '0', fileName: '', file: '' };
 	        if (props.task && props.task.id) {
-	            props.task.due = _this.fixDate(props.task.due);
+	            props.task.due = _DateHelper2.default.fixDate(props.task.due);
 	            _this.state = { task: props.task };
 	            _this.getTask(props.task);
 	        } else {
-	            _this.state = { task: _this.defaultTask };
+	            _this.state = { task: _Dom2.default.clone(defaultTask) };
 	        }
-	        _this.fixDate = _this.fixDate.bind(_this);
 	        _this.getTask = _this.getTask.bind(_this);
 	        _this.handleFileSelect = _this.handleFileSelect.bind(_this);
 	        _this.handleDragOver = _this.handleDragOver.bind(_this);
@@ -23266,14 +23301,6 @@
 	    }
 	
 	    _createClass(TaskForm, [{
-	        key: 'fixDate',
-	        value: function fixDate(date) {
-	            var d = new Date(date);
-	            var month = (d.getMonth() + 1).toString().length === 1 ? '0' + (d.getMonth() + 1).toString() : d.getMonth() + 1;
-	            var day = (d.getDate() + 1).toString().length === 1 ? '0' + (d.getDate() + 1).toString() : d.getDate() + 1;
-	            return d.getUTCFullYear() + '-' + month + '-' + day;
-	        }
-	    }, {
 	        key: 'getTask',
 	        value: function getTask(task) {
 	            var _this2 = this;
@@ -23281,10 +23308,10 @@
 	            return _Ajax2.default.task.getOne(task).then(function (response) {
 	                return response.json();
 	            }).then(function (data) {
-	                data.due = _this2.fixDate(data.due);
+	                data.due = _DateHelper2.default.fixDate(data.due);
 	                _this2.setState({ task: data });
 	            }).catch(function (data) {
-	                _this2.setState({ task: _this2.defaultTask });
+	                _this2.setState({ task: _Dom2.default.clone(defaultTask) });
 	            });
 	        }
 	    }, {
@@ -23298,9 +23325,8 @@
 	            var reader = new FileReader();
 	            reader.onload = function (contents) {
 	                return function (e) {
-	                    document.querySelector('input[name=file]').value = e.target.result;
-	                    document.querySelector('input[name=fileName]').value = file.name;
 	                    self.state.task.file = e.target.result;
+	                    self.state.task.fileName = file.name;
 	                    self.setState(self.state);
 	                };
 	            }(file);
@@ -23317,11 +23343,12 @@
 	        key: 'componentWillReceiveProps',
 	        value: function componentWillReceiveProps(nextProps) {
 	            if (nextProps.task && nextProps.task.id) {
-	                this.setState({ task: nextProps.task }, function () {
+	                nextProps.task.due = _DateHelper2.default.fixDate(nextProps.task.due);
+	                this.setState({ task: nextProps.task, error: null }, function () {
 	                    this.getTask(nextProps.task);
 	                });
 	            } else {
-	                this.setState({ task: this.defaultTask });
+	                this.setState({ task: _Dom2.default.clone(defaultTask), error: null });
 	            }
 	        }
 	    }, {
@@ -23340,10 +23367,6 @@
 	                _this3.state.users = [];
 	                _this3.setState(_this3.state);
 	            });
-	
-	            var fileInput = document.querySelector('input[name=fileName]');
-	            fileInput.addEventListener('dragover', this.handleDragOver, false);
-	            fileInput.addEventListener('drop', this.handleFileSelect, false);
 	        }
 	    }, {
 	        key: 'createUserOptions',
@@ -23352,14 +23375,14 @@
 	            if (!this.state.users) {
 	                this.state.users = [];
 	            }
-	            this.state.users.forEach(function (user) {
+	            jsx.push(_react2.default.createElement('option', { key: '0', value: '0' }));
+	            this.state.users.forEach(function (user, index) {
 	                jsx.push(_react2.default.createElement(
 	                    'option',
 	                    { key: user.id, value: user.id },
 	                    user.name
 	                ));
 	            });
-	
 	            return jsx;
 	        }
 	    }, {
@@ -23376,17 +23399,23 @@
 	            var key = 'save';
 	            this.state.task.password = 'password';
 	            this.state.task.role = 1;
+	            this.state.error = null;
 	            if (this.state.task.id) {
 	                key = 'update';
 	            }
 	            return _Ajax2.default.task[key](this.state.task).then(function (response) {
 	                return response.json();
 	            }).then(function (data) {
-	                _this4.setState({ task: data });
-	                _this4.props.update();
-	                _Dom2.default.removeClass(document.body, 'form-open');
+	                if (!data.error) {
+	                    _this4.setState({ task: _Dom2.default.clone(defaultTask) });
+	                    _this4.props.update();
+	                    _Dom2.default.removeClass(document.body, 'form-open');
+	                } else {
+	                    console.log(data.error);
+	                    _this4.setState({ error: data.error });
+	                }
 	            }).catch(function (data) {
-	                _this4.setState({ task: _this4.defaultTask });
+	                _this4.setState({ task: _Dom2.default.clone(defaultTask) });
 	            });
 	        }
 	    }, {
@@ -23413,6 +23442,16 @@
 	                        null,
 	                        'Due ',
 	                        _react2.default.createElement('input', { type: 'date', name: 'due', value: this.state.task.due, onChange: this.inputChange })
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        null,
+	                        'Owner ',
+	                        _react2.default.createElement(
+	                            'select',
+	                            { name: 'ownerId', value: this.state.task.ownerId, onChange: this.inputChange },
+	                            this.createUserOptions()
+	                        )
 	                    ),
 	                    _react2.default.createElement(
 	                        'div',
@@ -23452,7 +23491,7 @@
 	                        'div',
 	                        null,
 	                        'File ',
-	                        _react2.default.createElement('input', { type: 'text', name: 'fileName', value: this.state.task.fileName, onChange: this.inputChange, placeholder: 'Drag file here' }),
+	                        _react2.default.createElement('input', { type: 'text', name: 'fileName', value: this.state.task.fileName, onChange: this.inputChange, onDragOver: this.handleDragOver, onDrop: this.handleFileSelect, placeholder: 'Drag file here' }),
 	                        _react2.default.createElement('input', { type: 'hidden', name: 'file', value: this.state.task.file, onChange: this.inputChange })
 	                    ),
 	                    _react2.default.createElement(
@@ -23462,6 +23501,15 @@
 	                            'button',
 	                            { value: 'true', onClick: this.save },
 	                            'Save'
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        null,
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'error ' + (!this.state.error ? 'hidden' : '') },
+	                            this.state.error
 	                        )
 	                    )
 	                );
@@ -23911,16 +23959,23 @@
 	        value: function updateData() {
 	            var _this2 = this;
 	
+	            var self = this;
 	            this.setState({ data: undefined });
-	            return _Ajax2.default.task.getAll().then(function (response) {
+	            _Ajax2.default.task.getAll().then(function (response) {
 	                return response.json();
 	            }).then(function (data) {
-	                // this.state.failed = false;
 	                _this2.state.tasks = data;
 	                _this2.setState(_this2.state);
-	            }).catch(function (data) {
-	                // this.state.failed = true;
-	                _this2.state.tasks = [];
+	            });
+	            _Ajax2.default.user.getAll().then(function (response) {
+	                return response.json();
+	            }).then(function (data) {
+	                _this2.state.userMap = {};
+	                if (data && data.length) {
+	                    data.forEach(function (user) {
+	                        self.state.userMap[user.id] = user;
+	                    });
+	                }
 	                _this2.setState(_this2.state);
 	            });
 	        }
@@ -23947,6 +24002,10 @@
 	            var tasks = [];
 	            if (this.state.tasks) {
 	                this.state.tasks.forEach(function (task) {
+	                    if (self.state.userMap) {
+	                        task.user = self.state.userMap[task.userId];
+	                        task.owner = self.state.userMap[task.ownerId];
+	                    }
 	                    tasks.push(_react2.default.createElement(_TaskItem2.default, { task: task, key: task.id, loadForm: self.props.loadForm, update: self.props.update }));
 	                });
 	            }
@@ -24026,6 +24085,8 @@
 	
 	        _this.edit = _this.edit.bind(_this);
 	        _this.delete = _this.delete.bind(_this);
+	        _this.resolveStatusClass = _this.resolveStatusClass.bind(_this);
+	        _this.resolveStatus = _this.resolveStatus.bind(_this);
 	        return _this;
 	    }
 	
@@ -24050,6 +24111,32 @@
 	            });
 	        }
 	    }, {
+	        key: 'resolveStatusClass',
+	        value: function resolveStatusClass(status) {
+	            var r;
+	            if (status === 1) {
+	                r = 'defined';
+	            } else if (status === 2) {
+	                r = 'in-Progress';
+	            } else if (status === 3) {
+	                r = 'completed';
+	            }
+	            return r;
+	        }
+	    }, {
+	        key: 'resolveStatus',
+	        value: function resolveStatus(status) {
+	            var r;
+	            if (status === 1) {
+	                r = 'Defined';
+	            } else if (status === 2) {
+	                r = 'In Progress';
+	            } else if (status === 3) {
+	                r = 'Completed';
+	            }
+	            return r;
+	        }
+	    }, {
 	        key: 'render',
 	        value: function render() {
 	            return _react2.default.createElement(
@@ -24072,8 +24159,18 @@
 	                ),
 	                _react2.default.createElement(
 	                    'div',
+	                    { className: 'status ' + this.resolveStatusClass() },
+	                    this.resolveStatus(this.props.task.status)
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'owner' },
+	                    this.props.task.owner ? this.props.task.owner.name : 'No owner assigned to task'
+	                ),
+	                _react2.default.createElement(
+	                    'div',
 	                    { className: 'user' },
-	                    this.props.task.userId
+	                    this.props.task.user ? this.props.task.user.name : 'No user assigned to task'
 	                ),
 	                _react2.default.createElement(
 	                    'a',
@@ -24094,6 +24191,28 @@
 	}(_react2.default.Component);
 	
 	exports.default = TaskItem;
+
+/***/ },
+/* 198 */
+/*!**********************************************!*\
+  !*** ./src/client/app/helpers/DateHelper.js ***!
+  \**********************************************/
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	var DateHelper = {
+	    fixDate: function fixDate(date) {
+	        var d = new Date(date);
+	        var month = (d.getMonth() + 1).toString().length === 1 ? '0' + (d.getMonth() + 1).toString() : d.getMonth() + 1;
+	        var day = (d.getDate() + 1).toString().length === 1 ? '0' + (d.getDate() + 1).toString() : d.getDate() + 1;
+	        return d.getUTCFullYear() + '-' + month + '-' + day;
+	    }
+	};
+	exports.default = DateHelper;
 
 /***/ }
 /******/ ]);
